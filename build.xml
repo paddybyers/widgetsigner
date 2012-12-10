@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <project name="widgetsigner" default="jar" basedir=".">
+
+  <property name="build.dir" value="out"/>
+  <property name="classes.dir" value="out/classes"/>
+  <property name="lib.dir" value="lib"/>
+
+  <path id="classpath">
+    <fileset dir="${lib.dir}" includes="**/*.jar"/>
+  </path>
+
+  <target name="clean">
+    <delete dir="${classes.dir}"/>
+    <delete file="${build.dir}/widgetsigner.jar"/>
+  </target>
+
+  <target name="compile">
+    <mkdir dir="${classes.dir}"/>
+    <javac srcdir="src" destdir="${classes.dir}" classpathref="classpath" includeantruntime="false"/>
+  </target>
+
+  <target name="jar" depends="compile">
+    <jar destfile="${build.dir}/widgetsigner.jar">
+      <manifest>
+        <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+        <attribute name="Rsrc-Main-Class" value="org.meshpoint.widgetsigner.WidgetSigner"/>
+        <attribute name="Class-Path" value="."/>
+        <attribute name="Rsrc-Class-Path" value="./ bcprov-jdk15-145.jar commons-cli-1.2.jar commons-logging-1.1.jar xmlsec-1.4.5.jar"/>
+      </manifest>
+      <zipfileset src="${lib.dir}/jar-in-jar-loader.zip"/>
+      <fileset dir="${classes.dir}"/>
+      <zipfileset dir="${lib.dir}" includes="bcprov-jdk15-145.jar"/>
+      <zipfileset dir="${lib.dir}" includes="commons-cli-1.2.jar"/>
+      <zipfileset dir="${lib.dir}" includes="commons-logging-1.1.jar"/>
+      <zipfileset dir="${lib.dir}" includes="xmlsec-1.4.5.jar"/>
+    </jar>
+  </target>
+</project>
+
