@@ -102,7 +102,7 @@ public final class WidgetSigner {
 	private PrivateKey privatekey = null;
 	private IWidgetResource widget = null;
 
-	private static Provider bcProvider = new BouncyCastleProvider();
+	private static Provider bcProvider = null;
 
 	private WidgetSigner(){}
 
@@ -864,6 +864,10 @@ public final class WidgetSigner {
 	static {
 		org.apache.xml.security.Init.init();
 		signer = new WidgetSigner();
-        Security.addProvider(bcProvider);
+
+		bcProvider = Security.getProvider("BC");
+		if(bcProvider == null) bcProvider = new BouncyCastleProvider();
+		System.out.println("BC provider loaded: "+bcProvider.toString());
+
 	}
 }
